@@ -1,0 +1,69 @@
+#!/usr/bin/env bash
+# version configurations
+BSP_SERVER_VERSION="1.0.1"
+
+# set up vars
+DATABASE_USER="root"
+DATABASE_PASS=""
+TOMCAT_ZIP="https://github.com/OttoHagg/brightspot-server/archive/v$BSP_SERVER_VERSION.zip"
+
+#script status
+PROJECT_COMPLETE=false
+
+validateName() {
+    echo -n "Please name your project directory: "
+    read PROJECT_NAME
+}
+
+lineBreak() {
+    printf "\n"
+}
+
+createProject() {
+    echo -n "Git Clone URL (HTTPS): "
+    read GIT_URL
+    mkdir -p ./$PROJECT_NAME
+    cd $PROJECT_NAME
+    # Clone in project repo and download, extract, and delete tomcat
+    PROJECT_DIR=$(basename $GIT_URL)-project
+    git clone $GIT_URL $PROJECT_DIR
+    wget -O tomcat.zip $TOMCAT_ZIP
+    unzip ./tomcat.zip
+    rm -rf ./tomcat.zip
+    # create mysql schema
+    mysql -u root -e "CREATE DATABASE IF NOT EXISTS ${PROJECT_NAME//[\.-]/} CHARACTER SET utf8 COLLATE utf8_general_ci;"
+    # update context.xml
+    CONTEXT_FILE="./brightspot-server-$BSP_SERVER_VERSION/conf/context.xml"
+    sed -i '' "s#DATABASE_NAME#${PROJECT_NAME//[\.-]/}#g" $CONTEXT_FILE
+    sed -i '' "s#DATABASE_USER#$DATABASE_USER#g" $CONTEXT_FILE
+    sed -i '' "s#DATABASE_PASS#$DATABASE_PASS#g" $CONTEXT_FILE
+    sed -i '' "s#TOMCAT_PATH#$(pwd)/brightspot-server-$BSP_SERVER_VERSION#g" $CONTEXT_FILE
+    cd $PROJECT_DIR
+    # Maven build
+    rm -rf node_modules && yarn cache clean
+    mvn clean install
+    #link war to root
+    cd ../brightspot-server-$BSP_SERVER_VERSION/webapps
+    ln -sf ../../$PROJECT_DIR/target/*.war ./ROOT.war
+    # make shell scripts executable
+    cd ../bin
+    chmod a+x *.sh
+    cd ../
+    chown -R $USER *
+}
+
+start_time=`date +%s`
+echo "Brightspot Installation"
+while true; do
+    validateName
+    if [[ ! -z $PROJECT_NAME ]]; then
+        createProject
+        break
+    else
+        echo "Please enter a valid directory name"
+        lineBreak
+    fi
+done
+lineBreak
+echo "BRIGHTSPOT Server Setup Complete"
+echo "Execution time: $(expr `date +%s` - $start_time)s"
