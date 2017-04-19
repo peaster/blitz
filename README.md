@@ -21,4 +21,4 @@ For macOS users, an option to install via Homebrew is available. Simply execute 
 If you choose to not use Homebrew or are on a Linux machine, download the release files and move `blit` to a directory where you normally execute scripts from (i.e. `/usr/local/bin`).
 
 ## Using the Installer
-From the directory you typically install Brightspot projects in, run `bsp-install` and follow the prompts. The script will download and configure all necessary resources.
+From the directory you typically install Brightspot projects in, run `blit` and follow the prompts. The script will download and configure all necessary resources.
