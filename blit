@@ -19,6 +19,15 @@ lineBreak() {
     printf "\n"
 }
 
+# checks to see if wget is installed on a mac and installs if necessary
+installWget() {
+    if [ "$(uname)" == "Darwin" ]; then
+        if ! brew ls --versions wget > /dev/null; then
+            brew install wget
+        fi
+    fi
+}
+
 createProject() {
     echo -n "Git Clone URL (HTTPS): "
     read GIT_URL
@@ -27,6 +36,7 @@ createProject() {
     # Clone in project repo and download, extract, and delete tomcat
     PROJECT_DIR=$(basename $GIT_URL)-project
     git clone $GIT_URL $PROJECT_DIR
+    installWget
     wget -O tomcat.zip $TOMCAT_ZIP
     unzip ./tomcat.zip
     rm -rf ./tomcat.zip
