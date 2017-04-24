@@ -22,3 +22,5 @@ If you choose to not use Homebrew or are on a Linux machine, download the releas
 
 ## Using the Installer
 From the directory you typically install Brightspot projects in, run `blit` and follow the prompts. The script will download and configure all necessary resources.
+
+## [Frequently Asked Questions](https://github.com/p-easterbrooks/blit/wiki/Frequently-Asked-Questions)
