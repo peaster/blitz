@@ -5,7 +5,7 @@ BSP_SERVER_VERSION="1.0.1"
 # set up vars
 DATABASE_USER="root"
 DATABASE_PASS=""
-TOMCAT_CACHE=~/Library/Caches/blit
+
 TOMCAT_ZIP="$BSP_SERVER_VERSION.zip"
 TOMCAT_REMOTE="https://github.com/OttoHagg/brightspot-server/archive/v$TOMCAT_ZIP"
 TOMCAT_SHA256="f867ca731b1cd9cca5205c164e3b93f8946d5f950597c7cc1e1eb9c8f54b2cb9"
@@ -29,15 +29,20 @@ installWget() {
 }
 
 getTomcat() {
+    # detect OS and cache appropriately
     if [ "$(uname)" == "Darwin" ]; then
-        mkdir -p $TOMCAT_CACHE/
-        if ! [[ $(shasum -a 256 $TOMCAT_CACHE/brightspot-server-$TOMCAT_ZIP | awk '{ print $1 }') == $TOMCAT_SHA256 ]]; then
-            echo "Tomcat not found, downloading from remote source"
-            installWget
-            wget -O $TOMCAT_CACHE/brightspot-server-$TOMCAT_ZIP $TOMCAT_REMOTE
-        fi
-        cp $TOMCAT_CACHE/brightspot-server-$TOMCAT_ZIP ./tomcat.zip
+        TOMCAT_CACHE=~/Library/Caches/blitz
+    else
+        TOMCAT_CACHE=~/.cache/blitz
     fi
+
+    mkdir -p $TOMCAT_CACHE/
+    if ! [[ $(shasum -a 256 $TOMCAT_CACHE/brightspot-server-$TOMCAT_ZIP | awk '{ print $1 }') == $TOMCAT_SHA256 ]]; then
+        echo "Tomcat not found or is corrupt, downloading from remote source"
+        installWget
+        wget -O $TOMCAT_CACHE/brightspot-server-$TOMCAT_ZIP $TOMCAT_REMOTE
+    fi
+    cp $TOMCAT_CACHE/brightspot-server-$TOMCAT_ZIP ./tomcat.zip
 }
 
 #	----------------------------------------------------------------
