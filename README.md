@@ -1,4 +1,4 @@
-# Brightspot Local Installation Tool
+# Brightspot Local Installation Tool (BLITZ :zap:)
 
 Installs and configures local development instances of Brightspot from existing projects
 
