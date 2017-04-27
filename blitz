@@ -55,7 +55,7 @@ getTomcat() {
 function error_exit
 {
 	echo "${PROGNAME}: ${1:-"Unknown Error"}" 1>&2
-    rm -rf $PROJ_PATH
+    # rm -rf $PROJ_PATH
 	exit 1
 }
 
@@ -70,7 +70,7 @@ createProject() {
     cd $PROJECT_NAME
     # Clone in project repo and download, extract, and delete tomcat
     PROJECT_DIR=$(basename $GIT_URL)-project
-    git clone $GIT_URL $PROJECT_DIR
+    git clone $GIT_URL $PROJECT_DIR || error_exit "Git clone failed!"
     getTomcat
     unzip ./tomcat.zip
     rm -rf ./tomcat.zip
@@ -78,10 +78,10 @@ createProject() {
     mysql -u root -e "CREATE DATABASE IF NOT EXISTS ${PROJECT_NAME//[\.-]/} CHARACTER SET utf8 COLLATE utf8_general_ci;" || error_exit "MySQL not configured on PATH!"
     # update context.xml
     CONTEXT_FILE="./brightspot-server-$BSP_SERVER_VERSION/conf/context.xml"
-    sed -i '' "s#DATABASE_NAME#${PROJECT_NAME//[\.-]/}#g" $CONTEXT_FILE
-    sed -i '' "s#DATABASE_USER#$DATABASE_USER#g" $CONTEXT_FILE
-    sed -i '' "s#DATABASE_PASS#$DATABASE_PASS#g" $CONTEXT_FILE
-    sed -i '' "s#TOMCAT_PATH#$(pwd)/brightspot-server-$BSP_SERVER_VERSION#g" $CONTEXT_FILE
+    sed -i.bak "s#DATABASE_NAME#${PROJECT_NAME//[\.-]/}#g" $CONTEXT_FILE
+    sed -i.bak "s#DATABASE_USER#$DATABASE_USER#g" $CONTEXT_FILE
+    sed -i.bak "s#DATABASE_PASS#$DATABASE_PASS#g" $CONTEXT_FILE
+    sed -i.bak "s#TOMCAT_PATH#$(pwd)/brightspot-server-$BSP_SERVER_VERSION#g" $CONTEXT_FILE
     cd $PROJECT_DIR
     # Maven build
     rm -rf node_modules && yarn cache clean
