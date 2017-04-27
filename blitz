@@ -22,9 +22,7 @@ validateName() {
 # checks to see if wget is installed on a mac and installs if necessary
 installWget() {
     if [ "$(uname)" == "Darwin" ]; then
-        if ! brew ls --versions wget > /dev/null; then
-            brew install wget
-        fi
+        ! brew ls --versions wget > /dev/null && brew install wget
     fi
 }
 
