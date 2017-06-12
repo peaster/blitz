@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # version configurations
-BSP_SERVER_VERSION="1.0.1"
+BSP_SERVER_VERSION="1.0.2"
 
 # set up vars
 DATABASE_USER="root"
@@ -8,7 +8,7 @@ DATABASE_PASS=""
 
 TOMCAT_ZIP="$BSP_SERVER_VERSION.zip"
 TOMCAT_REMOTE="https://github.com/OttoHagg/brightspot-server/archive/v$TOMCAT_ZIP"
-TOMCAT_SHA256="f867ca731b1cd9cca5205c164e3b93f8946d5f950597c7cc1e1eb9c8f54b2cb9"
+TOMCAT_SHA256="9185c301ee106a80d0d2e6d823fb9c21de9729e78ee5a0933f4f519ad0eb2138"
 
 #script status
 PROGNAME=$(basename $0)
