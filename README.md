@@ -1,3 +1,4 @@
+**UPDATE 7/21/17 Blitz will not work with the core Brightspot Express project. Once the project is more stable, support will be considered**
 # Brightspot Local Installation Tool (BLITZ :zap:)
 
 Blitz is a command line tool that installs and configures local development instances of Brightspot from existing projects. 
