@@ -12,7 +12,7 @@ TOMCAT_SHA256="9185c301ee106a80d0d2e6d823fb9c21de9729e78ee5a0933f4f519ad0eb2138"
 
 #script status
 PROGNAME=$(basename $0)
-GIT_REGEX='(https?|ftp|file)://[-A-Za-z0-9\+&@#/%?=~_|!:,.;]*[-A-Za-z0-9\+&@#/%=~_|]'
+GIT_REGEX='((https?|ftp|file)://[-A-Za-z0-9\+&@#/%?=~_|!:,.;]*[-A-Za-z0-9\+&@#/%=~_|])|((git@github.com:[^[:space:]]*).*)'
 
 validateName() {
     echo -n "Please name your project directory: "
@@ -58,7 +58,7 @@ function error_exit
 }
 
 createProject() {
-    echo -n "Git Clone URL (HTTPS): "
+    echo -n "Git Clone URL (HTTPS/SSH): "
     read GIT_URL
     if ! [[ $GIT_URL =~ $GIT_REGEX ]] ; then
         error_exit "Git URL invalid!"
