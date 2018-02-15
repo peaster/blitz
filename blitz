@@ -57,8 +57,6 @@ function error_exit
 	exit 1
 }
 
-
-
 createProject() {
     echo -n "Git Clone URL (HTTPS/SSH): "
     read GIT_URL
