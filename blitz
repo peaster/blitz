@@ -57,6 +57,8 @@ function error_exit
 	exit 1
 }
 
+
+
 createProject() {
     echo -n "Git Clone URL (HTTPS/SSH): "
     read GIT_URL
@@ -86,7 +88,13 @@ createProject() {
     mvn clean install || error_exit "Maven build FAILURE"
     #link war to root
     cd ../brightspot-server-$BSP_SERVER_VERSION/webapps
-    ln -sf ../../$PROJECT_DIR/target/*.war ./ROOT.war
+    if [[ -d "../../$PROJECT_DIR/site" ]]; then
+        ln -sf ../../$PROJECT_DIR/site/target/*.war ./ROOT.war
+    else
+        ln -sf ../../$PROJECT_DIR/target/*.war ./ROOT.war
+    fi
+
+
     # make shell scripts executable
     cd ../bin
     chmod a+x *.sh
